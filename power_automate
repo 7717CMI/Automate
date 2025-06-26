@@ -1,0 +1,53 @@
+import subprocess
+import os
+import time
+import pyautogui
+
+def trigger_power_automate_flow(flow_name):
+    """
+    Triggers a Power Automate Desktop flow by launching the PAD executable and running the specified flow.
+    
+    Args:
+        flow_name (str): The name of the Power Automate Desktop flow to trigger.
+    """
+    # Path to the PAD.ConsoleHost.exe (check if this path is correct on your system)
+    pad_exe_path = r"C:\Program Files (x86)\Power Automate Desktop\PAD.Console.Host.exe"
+    flow_name = "Paid PR - Files Downloader"
+    # Verify if the PAD executable exists
+    if not os.path.exists(pad_exe_path):
+        print("Power Automate Desktop executable not found!")
+        return
+    
+    # Construct the command to trigger the flow
+    # The command format to trigger a flow is: PAD.ConsoleHost.exe -flow "FlowName"
+    command = f'"{pad_exe_path}" -flow "{flow_name}"'
+    
+    # Execute the command using subprocess
+    try:
+        result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        print(f"Flow triggered successfully. Output: {result.stdout}")
+
+        # Wait for PAD to load (you can adjust the time based on your system speed)
+        time.sleep(5)  # Wait for the app to fully open
+        
+        # Now, let's use PyAutoGUI to click the flow (replace with your actual coordinates)
+        flow_button_coordinates = (463, 395)  # Example coordinates, replace with the ones you captured
+        print(f"Clicking at {flow_button_coordinates}")
+        pyautogui.click(flow_button_coordinates)  # Click the flow
+        print("Flow triggered successfully.")
+
+
+    except subprocess.CalledProcessError as e:
+        print(f"Error triggering flow: {e.stderr}")
+
+# Example usage: Replace 'MyFlow' with the name of your flow in Power Automate Desktop
+trigger_power_automate_flow("Paid PR - Files Downloader")
+
+
+
+
+
+
+
+
+
