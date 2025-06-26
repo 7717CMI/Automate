@@ -1,0 +1,32 @@
+def convert_doc_to_docx(doc_path, output_path=None):
+    """
+    Convert a .doc file to .docx using Microsoft Word COM automation.
+
+    Args:
+        doc_path (str): Path to the input .doc file.
+        output_path (str): Path to save the output .docx file. If None, it saves the .docx in the same directory with a new extension.
+    """
+    # Initialize Word Application COM object
+    word = win32com.client.Dispatch("Word.Application")
+    word.Visible = False  # Set to False to run Word in the background
+
+    # Open the .doc file
+    doc = word.Documents.Open(doc_path)
+
+    # Define the output path if not provided
+    if not output_path:
+        output_path = os.path.splitext(doc_path)[0] + ".docx"
+
+    # Save the document as .docx
+    doc.SaveAs(output_path, FileFormat=16)  # 16 is the format for .docx
+    print(f"Document converted and saved as: {output_path}")
+
+    # Close the document and quit Word
+    doc.Close()
+    word.Quit()
+
+    return output_path
+
+# Example usage
+doc_path = r"C:\Users\akshat\Desktop\code\ROB_U.S. Hemophilia Treatment Market.doc"  # Update with your .doc file path
+output_docx = convert_doc_to_docx(doc_path)
