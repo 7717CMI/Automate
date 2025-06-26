@@ -13,7 +13,7 @@ import time
 def run_selenium_automation():
     chromedriver_path = ChromeDriverManager().install()
     options = Options()
-    options.add_argument("--headless")  # Run headlessly for Streamlit deployment
+    #options.add_argument("--headless")  # Run headlessly for Streamlit deployment
     options.add_argument("--start-maximized")
 
     # Initialize WebDriver
@@ -33,7 +33,7 @@ def run_selenium_automation():
     
     # Click Submit
     submit = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, '#sidr-main > div > ul > li.nav-item.dropdown.show > a'))
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="navbarText"]/ul/li[3]/a'))
     )
     submit.click()
 
@@ -42,7 +42,12 @@ def run_selenium_automation():
         EC.presence_of_element_located((By.XPATH, '//*[@id="code"]'))
     )
     input_box.clear()
-    input_box.send_keys("6HA-2025-M6K439")  # Replace with your desired input
+    input_box.send_keys("6HA-2025-M6K439") 
+    
+    submit2 = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/div/div/div[5]/div/form/button'))
+    )
+    submit2.click()
 
     # Fill out form details
     name = WebDriverWait(driver, 10).until(
@@ -176,8 +181,6 @@ st.write("This application automates the process of publishing articles on Open 
 # Input fields for user interaction
 article_code = st.text_input("Enter Article Code", "6HA-2025-M6K439")
 article_title = st.text_input("Enter Article Title", "Test title")
-article_content = st.text_area("Enter Article Content", """Global Smartphone Market Size, Trends, Growth, and Forecast Analysis 2025-2032
-The smartphone industry remains a pivotal sector...""")
 
 # Trigger the automation process when the user clicks the button
 if st.button('Publish Article'):
