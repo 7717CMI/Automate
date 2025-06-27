@@ -1,0 +1,40 @@
+import os
+import win32com.client
+from docx import Document
+
+# Folder to search in
+folder_path = r'C:\Users\akshat\Desktop\RPA\Files\2025\06\27'
+
+# Function to convert .doc to .docx using Microsoft Word COM automation
+def convert_doc_to_docx(doc_path, output_path=None):
+    word = win32com.client.Dispatch("Word.Application")
+    word.Visible = False
+    doc = word.Documents.Open(doc_path)
+    if not output_path:
+        output_path = os.path.splitext(doc_path)[0] + ".docx"
+    doc.SaveAs(output_path, FileFormat=16)  # 16 is the format for .docx
+    doc.Close()
+    word.Quit()
+    return output_path
+
+# Function to read and extract content from the .docx file
+def read_docx_content(docx_path):
+    try:
+        doc = Document(docx_path)
+        content = "\n".join([para.text for para in doc.paragraphs])
+        return content
+    except Exception as e:
+        return f"Error reading the document: {e}"
+
+# List all .doc files in the folder
+all_files = os.listdir(folder_path)
+doc_files = [file for file in all_files if file.endswith('.doc')]
+
+# Loop through the .doc files, convert, and print their content
+for doc_file in doc_files:
+    doc_path = os.path.join(folder_path, doc_file)
+    docx_path = convert_doc_to_docx(doc_path)
+    content = read_docx_content(docx_path)
+    print(f"Content of {doc_file}:")
+    print(content)
+    print("\n" + "-"*50 + "\n")
