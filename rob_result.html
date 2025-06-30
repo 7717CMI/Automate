@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Processing Complete{% endblock %}
+
+{% block content %}
+<div class="gradient-bg py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-custom">
+                    <div class="card-header bg-success text-white text-center">
+                        <h3 class="mb-0"><i class="fas fa-check-circle me-2"></i>Processing Complete!</h3>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-file-excel fa-4x text-success mb-3"></i>
+                            <h4>Your ROB file has been processed successfully</h4>
+                            <p class="text-muted">
+                                Processed by: <strong>{{ username }}</strong><br>
+                                Records processed: <strong>{{ records_processed }}</strong>
+                            </p>
+                        </div>
+                        
+                        <div class="alert alert-info alert-custom">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>File Locations:</strong><br>
+                            Download: {{ path }}<br>
+                            Power Automate Input: {{ power_automate_path }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+                            <a href="{{ download_url }}" class="btn btn-primary btn-lg btn-custom">
+                                <i class="fas fa-download me-2"></i>Download Processed File
+                            </a>
+                            <a href="{{ url_for('rob') }}" class="btn btn-outline-secondary btn-lg btn-custom">
+                                <i class="fas fa-plus me-2"></i>Process Another File
+                            </a>
+                        </div>
+                        
+                        <div class="progress progress-custom mb-3">
+                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                        
+                        <p class="text-muted">
+                            <i class="fas fa-robot me-2"></i>
+                            Triggering Power Automate in <span id="countdown">5</span> seconds...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let countdown = 5;
+const countdownElement = document.getElementById('countdown');
+
+const timer = setInterval(function() {
+    countdown--;
+    countdownElement.textContent = countdown;
+    if (countdown <= 0) {
+        clearInterval(timer);
+        countdownElement.textContent = '0';
+    }
+}, 1000);
+</script>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}ROB Processing{% endblock %}
+
+{% block content %}
+<div class="gradient-bg py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-custom">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h3 class="mb-0"><i class="fas fa-file-excel me-2"></i>ROB Data Processing</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" enctype="multipart/form-data" id="robForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Username <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="open_pr_id" class="form-label">
+                                        <i class="fas fa-id-card me-1"></i>Open PR ID <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="open_pr_id" name="open_pr_id" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="mobile" class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Mobile <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="tel" class="form-control" id="mobile" name="mobile" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="file" class="form-label">
+                                        <i class="fas fa-file-upload me-1"></i>Excel File <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="file" class="form-control" id="file" name="file" 
+                                           accept=".xlsx,.xls,.csv" required>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Supported formats: .xlsx, .xls, .csv (Max size: 16MB)
+                                    </div>
+                                    <div id="fileValidation" class="mt-2"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 text-center">
+                                <button type="submit" class="btn btn-success btn-lg btn-custom" id="submitBtn">
+                                    <i class="fas fa-play me-2"></i>Process File
+                                </button>
+                                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg btn-custom ms-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Required Columns Info -->
+                <div class="card card-custom mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Required Excel Columns</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>Report ID</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Report Name</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Companies covered</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Market Size Year 2025</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>CAGR</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Forecast Period</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Value Projection 2032</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('file').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const validation = document.getElementById('fileValidation');
+    
+    if (file) {
+        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+        const allowedTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                             'application/vnd.ms-excel', 'text/csv'];
+        
+        if (allowedTypes.includes(file.type) || file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+            if (file.size <= 16 * 1024 * 1024) {
+                validation.innerHTML = `<div class="alert alert-success alert-custom p-2">
+                    <i class="fas fa-check-circle me-2"></i>File selected: ${file.name} (${fileSize} MB)
+                </div>`;
+            } else {
+                validation.innerHTML = `<div class="alert alert-danger alert-custom p-2">
+                    <i class="fas fa-exclamation-triangle me-2"></i>File too large. Maximum size is 16MB.
+                </div>`;
+            }
+        } else {
+            validation.innerHTML = `<div class="alert alert-warning alert-custom p-2">
+                <i class="fas fa-exclamation-triangle me-2"></i>Invalid file type. Please select an Excel or CSV file.
+            </div>`;
+        }
+    }
+});
+
+document.getElementById('robForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+    submitBtn.disabled = true;
+});
+</script>
+{% endblock %}
+

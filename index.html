@@ -1,121 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keyword Analysis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #f6f8fa;
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            padding: 40px 32px 32px 32px;
-            max-width: 400px;
-            width: 100%;
-            margin: 32px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 18px;
-        }
-        form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-        }
-        label {
-            margin-top: 10px;
-            margin-bottom: 6px;
-            color: #4a5568;
-            font-weight: 500;
-        }
-        input[type="text"], input[type="file"] {
-            padding: 8px 0;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            background: #f1f5f9;
-            margin-bottom: 18px;
-            width: 100%;
-        }
-        input[type="submit"] {
-            background: linear-gradient(90deg, #4f8cff 0%, #2356c7 100%);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 12px 0;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 8px;
-        }
-        input[type="submit"]:hover {
-            background: linear-gradient(90deg, #2356c7 0%, #4f8cff 100%);
-        }
-        .flash {
-            color: #e53e3e;
-            background: #fff5f5;
-            border: 1px solid #fed7d7;
-            border-radius: 6px;
-            padding: 10px 16px;
-            margin-bottom: 18px;
-            width: 100%;
-            text-align: center;
-        }
-        .task-link {
-            display: inline-block;
-            margin-top: 18px;
-            color: #4f8cff;
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: 4px;
-            padding: 8px 16px;
-            background: #eaf1ff;
-            transition: background 0.2s, color 0.2s;
-        }
-        .task-link:hover {
-            background: #4f8cff;
-            color: #fff;
-        }
-        @media (max-width: 500px) {
-            .container { padding: 24px 8px; }
-            h1 { font-size: 1.3rem; }
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Home - ROB Processing System{% endblock %}
+
+{% block content %}
+<div class="gradient-bg d-flex align-items-center">
     <div class="container">
-        <h1>Keyword Analysis</h1>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div class="flash">{{ messages[0] }}</div>
-          {% endif %}
-        {% endwith %}
-        <form action="/" method="post" enctype="multipart/form-data">
-            <label for="api_key">SerpAPI Key:</label>
-            <input type="text" id="api_key" name="api_key" required>
-            <label for="file">Excel File (.xlsx):</label>
-            <input type="file" id="file" name="file" accept=".xlsx" required>
-            <input type="submit" value="Process Keywords">
-        </form>
-        <a class="task-link" href="/task">Go to Task Page &rarr;</a>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="card card-custom">
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-chart-line fa-4x text-primary mb-3"></i>
+                            <h1 class="display-4 fw-bold text-dark">ROB Processing System</h1>
+                            <p class="lead text-muted">Transform your market research data with automated processing</p>
+                        </div>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <i class="fas fa-upload fa-2x text-success mb-2"></i>
+                                    <h5>Upload Excel</h5>
+                                    <p class="text-muted small">Upload your market research Excel files</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <i class="fas fa-cogs fa-2x text-warning mb-2"></i>
+                                    <h5>Process Data</h5>
+                                    <p class="text-muted small">Automated data transformation and CTA generation</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <i class="fas fa-download fa-2x text-info mb-2"></i>
+                                    <h5>Download Result</h5>
+                                    <p class="text-muted small">Get your processed ROB file instantly</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{{ url_for('rob') }}" class="btn btn-primary btn-lg btn-custom">
+                                <i class="fas fa-file-excel me-2"></i>ROB Processing
+                            </a>
+                            <a href="{{ url_for('document_processing') }}" class="btn btn-success btn-lg btn-custom">
+                                <i class="fas fa-file-word me-2"></i>Document Processing
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

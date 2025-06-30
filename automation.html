@@ -1,66 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automation Triggered</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: #f6f8fa;
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            padding: 40px 32px 32px 32px;
-            max-width: 400px;
-            width: 100%;
-            margin: 32px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 18px;
-        }
-        p {
-            color: #4a5568;
-            font-size: 1.1rem;
-            margin-bottom: 18px;
-            text-align: center;
-        }
-        a {
-            color: #4f8cff;
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: 4px;
-            padding: 8px 16px;
-            background: #eaf1ff;
-            transition: background 0.2s, color 0.2s;
-        }
-        a:hover {
-            background: #4f8cff;
-            color: #fff;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Automation Triggered{% endblock %}
+
+{% block content %}
+<div class="gradient-bg py-5">
     <div class="container">
-        <h1>Automation Triggered</h1>
-        <p>The Power Automate Desktop flow has been triggered.<br>
-        Please check your Desktop for the downloaded <b>ROB.xlsx</b> file after the automation completes.</p>
-        <a href="/">&#8592; Back to Home</a>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-custom">
+                    <div class="card-header bg-warning text-dark text-center">
+                        <h3 class="mb-0"><i class="fas fa-robot me-2"></i>Automation in Progress</h3>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-4">
+                            <div class="spinner-border text-warning mb-3" style="width: 4rem; height: 4rem;" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <h4>Power Automate Flow Triggered</h4>
+                            <p class="text-muted">The automation process has been started successfully.</p>
+                        </div>
+                        
+                        <div class="alert alert-warning alert-custom">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Please wait...</strong> The automation is running in the background.
+                        </div>
+                        
+                        <div class="progress progress-custom mb-4">
+                            <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg btn-custom">
+                                <i class="fas fa-home me-2"></i>Back to Home
+                            </a>
+                            <a href="{{ url_for('rob') }}" class="btn btn-outline-secondary btn-lg btn-custom">
+                                <i class="fas fa-file-excel me-2"></i>ROB Processing
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
+
