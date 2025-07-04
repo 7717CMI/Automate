@@ -72,7 +72,7 @@ def document_processing():
     if request.method == 'POST':
         try:
             # Get form data - use session data as defaults if available
-            article_code = request.form.get('article_code') or request.form.get('open_pr_id') or session.get('open_pr_id', '6HA-2025-M6K439')
+            article_code = request.form.get('article_code') or request.form.get('open_pr_id') or session.get('open_pr_id', 'FPW-2025-AG1VVE')
             author_name = request.form.get('author_name') or session.get('username', 'Vishwas tiwari')
             author_email = request.form.get('author_email') or session.get('email', 'vishwas@coherentmarketinsights.com')
             company_name = request.form.get('company_name', 'Coherent Market Insights')
@@ -179,6 +179,9 @@ def convert_doc_to_docx(doc_path, output_path=None):
         log_to_status(f"Error converting doc to docx: {e}")
         return None
 
+import re
+from docx import Document
+
 def text_of_press_release(doc_path, start_index=21, end_index=-8):
     # Load the DOCX file
     doc = Document(doc_path)
@@ -229,7 +232,7 @@ def text_of_press_release(doc_path, start_index=21, end_index=-8):
             'FAQs'
         ]
         for header in section_headers:
-            chunk = chunk.replace(header, f"\n\n{header}")
+            chunk = chunk.replace(header, f"\n{header}\n")
 
         # Remove dashes before content
         chunk = re.sub(r'-{2,}', '', chunk)
@@ -241,12 +244,15 @@ def text_of_press_release(doc_path, start_index=21, end_index=-8):
         chunk = re.sub(r'\s*(FAQ?s?:?)', r'\n\n\1\n\n', chunk)
 
         # Ensure each numbered FAQ starts on a new line
-        # Matches e.g., 1. or 2.
         chunk = re.sub(r'\s*(\d+\.\s)', r'\n\1', chunk)
 
+        # Separate FAQ questions from answers (put answer on new line after question)
+        chunk = re.sub(r'(\d+\.\s[^?]+\?)\s+([A-Z])', r'\1\n\2', chunk)
+
+        # Add space after each FAQ answer (before the next FAQ number)
+        chunk = re.sub(r'([a-z\.])(\n)(\d+\.)', r'\1\n\2\3', chunk)
+
         # Add proper spacing around phrase + link combinations using regex
-        # Use regex to find and format phrase+link combinations dynamically
-        # Pattern to match the three specific phrase patterns followed by URLs
         patterns = [
             r"(Explore the Entire Market Report here:\s*)(https://www\.coherentmarketinsights\.com/market-insight/[^\s]+)",
             r"(Request for Sample Copy of the Report here\s*:\s*)(https://www\.coherentmarketinsights\.com/insight/request-sample/[^\s]+)",
@@ -264,6 +270,7 @@ def text_of_press_release(doc_path, start_index=21, end_index=-8):
         return chunk
     else:
         return "Text not found."
+
     
 def run_selenium_automation(article_code, article_title, multiline_text, author_name, 
                           author_email, company_name, phone_number):
@@ -378,8 +385,6 @@ def run_selenium_automation(article_code, article_title, multiline_text, author_
         AUS: +61-2-4786-0457
         INDIA: +91-848-285-0837
         ✉ Email: sales@coherentmarketinsights.com
-        About Us:
-        Coherent Market Insights leads into data and analytics, audience measurement, consumer behaviors, and market trend analysis. From shorter dispatch to in-depth insights, CMI has exceled in offering research, analytics, and consumer-focused shifts for nearly a decade. With cutting-edge syndicated tools and custom-made research services, we empower businesses to move in the direction of growth. We are multifunctional in our work scope and have 450+ seasoned consultants, analysts, and researchers across 26+ industries spread out in 32+ countries.")
         """
         about.send_keys(multi)
         
